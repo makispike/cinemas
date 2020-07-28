@@ -15,117 +15,15 @@ CREATE SCHEMA IF NOT EXISTS `cinema` DEFAULT CHARACTER SET utf8 ;
 USE `cinema` ;
 
 -- -----------------------------------------------------
--- Table `cinema`.`complexe`
+-- Table `cinema`.`utilisateur`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`complexe` (
-  `idComplexe` INT NOT NULL AUTO_INCREMENT,
-  `nomComplexe` VARCHAR(45) NULL DEFAULT NULL,
-  `adresseComplexe` VARCHAR(255) NULL DEFAULT NULL,
-  `descriptifComplexeFR` TEXT NULL DEFAULT NULL,
-  `descriptifComplexeNL` TEXT NULL DEFAULT NULL,
-  `descriptifComplexeEN` TEXT NULL DEFAULT NULL,
-  `urlPhotoComplexe` VARCHAR(255) NULL DEFAULT NULL,
-  PRIMARY KEY (`idComplexe`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `cinema`.`categorie`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`categorie` (
-  `idCategorie` INT NOT NULL AUTO_INCREMENT,
-  `prixCategorie` DECIMAL(4,2) NULL DEFAULT NULL,
-  `nomCategorieFR` VARCHAR(45) NULL DEFAULT NULL,
-  `nomCategorieNL` VARCHAR(45) NULL DEFAULT NULL,
-  `nomCategorieEN` VARCHAR(45) NULL DEFAULT NULL,
-  `COMPLEXE_idComplexe` INT NOT NULL,
-  PRIMARY KEY (`idCategorie`, `COMPLEXE_idComplexe`),
-  INDEX `fk_CATEGORIE_COMPLEXE1_idx` (`COMPLEXE_idComplexe` ASC),
-  CONSTRAINT `fk_CATEGORIE_COMPLEXE1`
-    FOREIGN KEY (`COMPLEXE_idComplexe`)
-    REFERENCES `cinema`.`complexe` (`idComplexe`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `cinema`.`film`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`film` (
-  `idFilm` INT NOT NULL AUTO_INCREMENT,
-  `nomFilmFR` VARCHAR(128) NULL DEFAULT NULL,
-  `nomFilmNL` VARCHAR(128) NULL DEFAULT NULL,
-  `nomFilmEN` VARCHAR(128) NULL DEFAULT NULL,
-  `descriptionFR` TEXT NULL DEFAULT NULL,
-  `descriptionNL` TEXT NULL DEFAULT NULL,
-  `descriptionEN` TEXT NULL DEFAULT NULL,
-  `urlPhotoFilm` VARCHAR(255) NULL DEFAULT NULL,
-  PRIMARY KEY (`idFilm`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `cinema`.`version`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`version` (
-  `idVersion` INT NOT NULL AUTO_INCREMENT,
-  `libelleVersion` VARCHAR(8) NULL DEFAULT NULL,
-  PRIMARY KEY (`idVersion`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `cinema`.`film_has_version`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`film_has_version` (
-  `FILM_idFilm` INT NOT NULL,
-  `VERSION_idVersion` INT NOT NULL,
-  PRIMARY KEY (`FILM_idFilm`, `VERSION_idVersion`),
-  INDEX `fk_FILM_has_VERSION_VERSION1_idx` (`VERSION_idVersion` ASC),
-  INDEX `fk_FILM_has_VERSION_FILM1_idx` (`FILM_idFilm` ASC),
-  CONSTRAINT `fk_FILM_has_VERSION_FILM1`
-    FOREIGN KEY (`FILM_idFilm`)
-    REFERENCES `cinema`.`film` (`idFilm`),
-  CONSTRAINT `fk_FILM_has_VERSION_VERSION1`
-    FOREIGN KEY (`VERSION_idVersion`)
-    REFERENCES `cinema`.`version` (`idVersion`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `cinema`.`genre`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`genre` (
-  `idGenre` INT NOT NULL AUTO_INCREMENT,
-  `libelleGenreFR` VARCHAR(45) NULL DEFAULT NULL,
-  `libelleGenreNL` VARCHAR(45) NULL DEFAULT NULL,
-  `libelleGenreEN` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`idGenre`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `cinema`.`genre_has_film`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`genre_has_film` (
-  `GENRE_idGenre` INT NOT NULL,
-  `FILM_idFilm` INT NOT NULL,
-  PRIMARY KEY (`GENRE_idGenre`, `FILM_idFilm`),
-  INDEX `fk_GENRE_has_FILM_FILM1_idx` (`FILM_idFilm` ASC),
-  INDEX `fk_GENRE_has_FILM_GENRE1_idx` (`GENRE_idGenre` ASC),
-  CONSTRAINT `fk_GENRE_has_FILM_FILM1`
-    FOREIGN KEY (`FILM_idFilm`)
-    REFERENCES `cinema`.`film` (`idFilm`),
-  CONSTRAINT `fk_GENRE_has_FILM_GENRE1`
-    FOREIGN KEY (`GENRE_idGenre`)
-    REFERENCES `cinema`.`genre` (`idGenre`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+CREATE TABLE IF NOT EXISTS `cinema`.`utilisateur` (
+  `idUtilisateur` INT NOT NULL AUTO_INCREMENT,
+  `emailUtilisateur` VARCHAR(45) NOT NULL,
+  `roleUtilisateur` VARCHAR(45) NULL DEFAULT 'user',
+  PRIMARY KEY (`idUtilisateur`),
+  UNIQUE INDEX `emailUtilisateur_UNIQUE` (`emailUtilisateur` ASC))
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -133,34 +31,22 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cinema`.`profil` (
   `idProfil` INT NOT NULL AUTO_INCREMENT,
-  `nomUtilisateur` VARCHAR(45) NULL DEFAULT NULL,
-  `prenomUtilisateur` VARCHAR(45) NULL DEFAULT NULL,
-  `adresseUtilisateur` VARCHAR(255) NULL DEFAULT NULL,
-  `ageUtilisateur` INT NULL DEFAULT NULL,
+  `nomUtilisateur` VARCHAR(45) NULL,
+  `prenomUtilisateur` VARCHAR(45) NULL,
+  `adresseUtilisateur` VARCHAR(255) NULL,
+  `ageUtilisateur` INT NULL,
   `langueUtilisateur` VARCHAR(2) NULL DEFAULT 'EN',
-  `pseudoUtilisateur` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`idProfil`),
-  UNIQUE INDEX `pseudoUtilisateur_UNIQUE` (`pseudoUtilisateur` ASC))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `cinema`.`utilisateur`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`utilisateur` (
-  `idUtilisateur` INT NOT NULL AUTO_INCREMENT,
-  `emailUtilisateur` VARCHAR(45) NOT NULL,
-  `roleUtilisateur` VARCHAR(45) NULL DEFAULT 'user',
-  `PROFIL_idProfil` INT NOT NULL,
-  PRIMARY KEY (`idUtilisateur`, `PROFIL_idProfil`),
-  UNIQUE INDEX `emailUtilisateur_UNIQUE` (`emailUtilisateur` ASC),
-  INDEX `fk_UTILISATEUR_PROFIL_idx` (`PROFIL_idProfil` ASC),
-  CONSTRAINT `fk_UTILISATEUR_PROFIL`
-    FOREIGN KEY (`PROFIL_idProfil`)
-    REFERENCES `cinema`.`profil` (`idProfil`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  `pseudoUtilisateur` VARCHAR(45) NULL,
+  `utilisateur_idUtilisateur` INT NOT NULL,
+  PRIMARY KEY (`idProfil`, `utilisateur_idUtilisateur`),
+  UNIQUE INDEX `pseudoUtilisateur_UNIQUE` (`pseudoUtilisateur` ASC),
+  INDEX `fk_profil_utilisateur1_idx` (`utilisateur_idUtilisateur` ASC),
+  CONSTRAINT `fk_profil_utilisateur1`
+    FOREIGN KEY (`utilisateur_idUtilisateur`)
+    REFERENCES `cinema`.`utilisateur` (`idUtilisateur`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -168,15 +54,31 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cinema`.`reservation` (
   `idReservation` INT NOT NULL AUTO_INCREMENT,
-  `dateReservation` DATETIME NULL DEFAULT NULL,
-  `UTILISATEUR_idUtilisateur` INT NOT NULL,
-  PRIMARY KEY (`idReservation`, `UTILISATEUR_idUtilisateur`),
-  INDEX `fk_RESERVATION_UTILISATEUR1_idx` (`UTILISATEUR_idUtilisateur` ASC),
-  CONSTRAINT `fk_RESERVATION_UTILISATEUR1`
-    FOREIGN KEY (`UTILISATEUR_idUtilisateur`)
-    REFERENCES `cinema`.`utilisateur` (`idUtilisateur`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  `dateReservation` DATETIME NULL,
+  `utilisateur_idUtilisateur` INT NOT NULL,
+  PRIMARY KEY (`idReservation`, `utilisateur_idUtilisateur`),
+  INDEX `fk_reservation_utilisateur1_idx` (`utilisateur_idUtilisateur` ASC),
+  CONSTRAINT `fk_reservation_utilisateur1`
+    FOREIGN KEY (`utilisateur_idUtilisateur`)
+    REFERENCES `cinema`.`utilisateur` (`idUtilisateur`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `cinema`.`complexe`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cinema`.`complexe` (
+  `idComplexe` INT NOT NULL AUTO_INCREMENT,
+  `nomComplexe` VARCHAR(45) NULL,
+  `adresseComplexe` VARCHAR(255) NULL,
+  `descriptifComplexeFR` TEXT NULL,
+  `descriptifComplexeNL` TEXT NULL,
+  `descriptifComplexeEN` TEXT NULL,
+  `urlPhotoComplexe` VARCHAR(255) NULL,
+  PRIMARY KEY (`idComplexe`))
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -184,16 +86,33 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cinema`.`salle` (
   `idSalle` INT NOT NULL AUTO_INCREMENT,
-  `nbSalle` INT NULL DEFAULT NULL,
-  `nbPlacesSalle` INT NULL DEFAULT NULL,
-  `COMPLEXE_idComplexe` INT NOT NULL,
-  PRIMARY KEY (`idSalle`, `COMPLEXE_idComplexe`),
-  INDEX `fk_SALLE_COMPLEXE1_idx` (`COMPLEXE_idComplexe` ASC),
-  CONSTRAINT `fk_SALLE_COMPLEXE1`
-    FOREIGN KEY (`COMPLEXE_idComplexe`)
-    REFERENCES `cinema`.`complexe` (`idComplexe`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  `nbSalle` INT NULL,
+  `nbPlacesSalle` INT NULL,
+  `complexe_idComplexe` INT NOT NULL,
+  PRIMARY KEY (`idSalle`, `complexe_idComplexe`),
+  INDEX `fk_salle_complexe1_idx` (`complexe_idComplexe` ASC),
+  CONSTRAINT `fk_salle_complexe1`
+    FOREIGN KEY (`complexe_idComplexe`)
+    REFERENCES `cinema`.`complexe` (`idComplexe`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `cinema`.`film`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cinema`.`film` (
+  `idFilm` INT NOT NULL AUTO_INCREMENT,
+  `nomFilmFR` VARCHAR(128) NULL,
+  `nomFilmNL` VARCHAR(128) NULL,
+  `nomFilmEN` VARCHAR(128) NULL,
+  `descriptionFR` TEXT NULL,
+  `descriptionNL` TEXT NULL,
+  `descriptionEN` TEXT NULL,
+  `urlPhotoFilm` VARCHAR(255) NULL,
+  PRIMARY KEY (`idFilm`))
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -201,22 +120,46 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cinema`.`seance` (
   `idSeance` INT NOT NULL AUTO_INCREMENT,
-  `dateSeance` DATE NULL DEFAULT NULL,
-  `heureSeance` TIME NULL DEFAULT NULL,
-  `nbPlacesDisponibles` INT NULL DEFAULT NULL,
-  `SALLE_idSalle` INT NOT NULL,
-  `FILM_idFilm` INT NOT NULL,
-  PRIMARY KEY (`idSeance`, `FILM_idFilm`, `SALLE_idSalle`),
-  INDEX `fk_SEANCE_SALLE1_idx` (`SALLE_idSalle` ASC),
-  INDEX `fk_SEANCE_FILM1_idx` (`FILM_idFilm` ASC),
-  CONSTRAINT `fk_SEANCE_FILM1`
-    FOREIGN KEY (`FILM_idFilm`)
-    REFERENCES `cinema`.`film` (`idFilm`),
-  CONSTRAINT `fk_SEANCE_SALLE1`
-    FOREIGN KEY (`SALLE_idSalle`)
-    REFERENCES `cinema`.`salle` (`idSalle`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  `dateSeance` DATE NULL,
+  `heureSeance` TIME NULL,
+  `nbPlacesDisponibles` INT NULL,
+  `salle_idSalle` INT NOT NULL,
+  `salle_complexe_idComplexe` INT NOT NULL,
+  `film_idFilm` INT NOT NULL,
+  PRIMARY KEY (`idSeance`, `salle_idSalle`, `salle_complexe_idComplexe`, `film_idFilm`),
+  INDEX `fk_seance_salle1_idx` (`salle_idSalle` ASC, `salle_complexe_idComplexe` ASC),
+  INDEX `fk_seance_film1_idx` (`film_idFilm` ASC),
+  CONSTRAINT `fk_seance_salle1`
+    FOREIGN KEY (`salle_idSalle` , `salle_complexe_idComplexe`)
+    REFERENCES `cinema`.`salle` (`idSalle` , `complexe_idComplexe`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_seance_film1`
+    FOREIGN KEY (`film_idFilm`)
+    REFERENCES `cinema`.`film` (`idFilm`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `cinema`.`categorie`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cinema`.`categorie` (
+  `idCategorie` INT NOT NULL AUTO_INCREMENT,
+  `prixCategorie` DECIMAL(4,2) NULL,
+  `nomCategorieFR` VARCHAR(45) NULL,
+  `nomCategorieNL` VARCHAR(45) NULL,
+  `nomCategorieEN` VARCHAR(45) NULL,
+  `complexe_idComplexe` INT NOT NULL,
+  PRIMARY KEY (`idCategorie`, `complexe_idComplexe`),
+  INDEX `fk_categorie_complexe1_idx` (`complexe_idComplexe` ASC),
+  CONSTRAINT `fk_categorie_complexe1`
+    FOREIGN KEY (`complexe_idComplexe`)
+    REFERENCES `cinema`.`complexe` (`idComplexe`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -224,25 +167,104 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cinema`.`ticket` (
   `idTicket` INT NOT NULL AUTO_INCREMENT,
-  `RESERVATION_idReservation` INT NOT NULL,
-  `CATEGORIE_idCategorie` INT NOT NULL,
-  `SEANCE_idSeance` INT NOT NULL,
-  PRIMARY KEY (`idTicket`, `CATEGORIE_idCategorie`, `SEANCE_idSeance`),
-  INDEX `fk_TICKET_RESERVATION1_idx` (`RESERVATION_idReservation` ASC),
-  INDEX `fk_TICKET_CATEGORIE1_idx` (`CATEGORIE_idCategorie` ASC),
-  INDEX `fk_TICKET_SEANCE1_idx` (`SEANCE_idSeance` ASC),
-  CONSTRAINT `fk_TICKET_CATEGORIE1`
-    FOREIGN KEY (`CATEGORIE_idCategorie`)
-    REFERENCES `cinema`.`categorie` (`idCategorie`),
-  CONSTRAINT `fk_TICKET_RESERVATION1`
-    FOREIGN KEY (`RESERVATION_idReservation`)
-    REFERENCES `cinema`.`reservation` (`idReservation`),
-  CONSTRAINT `fk_TICKET_SEANCE1`
-    FOREIGN KEY (`SEANCE_idSeance`)
-    REFERENCES `cinema`.`seance` (`idSeance`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  `reservation_idReservation` INT NOT NULL,
+  `reservation_utilisateur_idUtilisateur` INT NOT NULL,
+  `seance_idSeance` INT NOT NULL,
+  `categorie_idCategorie` INT NOT NULL,
+  PRIMARY KEY (`idTicket`, `seance_idSeance`, `categorie_idCategorie`),
+  INDEX `fk_ticket_reservation1_idx` (`reservation_idReservation` ASC, `reservation_utilisateur_idUtilisateur` ASC),
+  INDEX `fk_ticket_seance1_idx` (`seance_idSeance` ASC),
+  INDEX `fk_ticket_categorie1_idx` (`categorie_idCategorie` ASC),
+  CONSTRAINT `fk_ticket_reservation1`
+    FOREIGN KEY (`reservation_idReservation` , `reservation_utilisateur_idUtilisateur`)
+    REFERENCES `cinema`.`reservation` (`idReservation` , `utilisateur_idUtilisateur`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ticket_seance1`
+    FOREIGN KEY (`seance_idSeance`)
+    REFERENCES `cinema`.`seance` (`idSeance`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ticket_categorie1`
+    FOREIGN KEY (`categorie_idCategorie`)
+    REFERENCES `cinema`.`categorie` (`idCategorie`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `cinema`.`version`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cinema`.`version` (
+  `idVersion` INT NOT NULL AUTO_INCREMENT,
+  `libelleVersion` VARCHAR(8) NULL,
+  PRIMARY KEY (`idVersion`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `cinema`.`genre`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cinema`.`genre` (
+  `idGenre` INT NOT NULL AUTO_INCREMENT,
+  `libelleGenreFR` VARCHAR(45) NULL,
+  `libelleGenreNL` VARCHAR(45) NULL,
+  `libelleGenreEN` VARCHAR(45) NULL,
+  PRIMARY KEY (`idGenre`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `cinema`.`film_has_version`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cinema`.`film_has_version` (
+  `film_idFilm` INT NOT NULL,
+  `version_idVersion` INT NOT NULL,
+  PRIMARY KEY (`film_idFilm`, `version_idVersion`),
+  INDEX `fk_FILM_has_VERSION_VERSION1_idx` (`version_idVersion` ASC),
+  INDEX `fk_FILM_has_VERSION_FILM1_idx` (`film_idFilm` ASC),
+  CONSTRAINT `fk_FILM_has_VERSION_FILM1`
+    FOREIGN KEY (`film_idFilm`)
+    REFERENCES `cinema`.`film` (`idFilm`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_FILM_has_VERSION_VERSION1`
+    FOREIGN KEY (`version_idVersion`)
+    REFERENCES `cinema`.`version` (`idVersion`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `cinema`.`genre_has_film`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cinema`.`genre_has_film` (
+  `genre_idGenre` INT NOT NULL,
+  `film_idFilm` INT NOT NULL,
+  PRIMARY KEY (`genre_idGenre`, `film_idFilm`),
+  INDEX `fk_GENRE_has_FILM_FILM1_idx` (`film_idFilm` ASC),
+  INDEX `fk_GENRE_has_FILM_GENRE1_idx` (`genre_idGenre` ASC),
+  CONSTRAINT `fk_GENRE_has_FILM_GENRE1`
+    FOREIGN KEY (`genre_idGenre`)
+    REFERENCES `cinema`.`genre` (`idGenre`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_GENRE_has_FILM_FILM1`
+    FOREIGN KEY (`film_idFilm`)
+    REFERENCES `cinema`.`film` (`idFilm`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE USER 'admin' IDENTIFIED BY 'admin';
+
+GRANT SELECT, INSERT, TRIGGER ON TABLE `cinema`.* TO 'admin';
+GRANT SELECT, INSERT, TRIGGER, UPDATE, DELETE ON TABLE `cinema`.* TO 'admin';
+CREATE USER 'user' IDENTIFIED BY 'user';
+
+GRANT SELECT, INSERT, TRIGGER, UPDATE, DELETE ON TABLE `cinema`.* TO 'user';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
