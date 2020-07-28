@@ -1,6 +1,6 @@
-package ephec.integration.cinemas.persistence.controllers;
+package ephec.integration.cinemas.persistence.control;
 
-import ephec.integration.cinemas.persistence.entities.Profile;
+import ephec.integration.cinemas.persistence.entity.Profile;
 import org.springframework.data.repository.CrudRepository;
 
 public interface ProfileRepository extends CrudRepository<Profile, Integer> {

@@ -1,4 +1,4 @@
-package ephec.integration.cinemas.persistence.entities;
+package ephec.integration.cinemas.persistence.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -53,6 +53,6 @@ public class Movie {
     )
     Set<Version> versions = new HashSet<>();
 
-    @OneToMany(mappedBy="movie")
+    @OneToMany(mappedBy="movie", cascade = CascadeType.ALL)
     private Set<Screening> screenings;
 }

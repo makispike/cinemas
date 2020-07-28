@@ -1,9 +1,11 @@
-package ephec.integration.cinemas.persistence.entities;
+package ephec.integration.cinemas.persistence.entity;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Set;
 
 @Entity
@@ -11,27 +13,25 @@ import java.util.Set;
 @Table(name = "seance")
 public class Screening {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "idSeance")
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "idSeance", nullable = false, updatable = false)
     private Integer screeningId;
 
     @Column(name = "dateSeance")
-    private Integer screeningDate;
+    private LocalDate screeningDate;
 
     @Column(name = "heureSeance")
-    private Integer screeningTime;
+    private LocalTime screeningTime;
 
     @Column(name = "nbPlacesDisponibles")
     private Integer availableSeats;
 
-    @ManyToOne
-    @JoinColumn(name="salle_idSalle")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Venue venue;
 
-    @ManyToOne
-    @JoinColumn(name="film_idFilm")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Movie movie;
 
-    @OneToMany(mappedBy="screening")
+    @OneToMany(mappedBy="screening", cascade = CascadeType.ALL)
     private Set<Ticket> tickets;
 }

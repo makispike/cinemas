@@ -1,6 +1,6 @@
-package ephec.integration.cinemas.persistence.controllers;
+package ephec.integration.cinemas.persistence.control;
 
-import ephec.integration.cinemas.persistence.entities.User;
+import ephec.integration.cinemas.persistence.entity.User;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User, Integer> {

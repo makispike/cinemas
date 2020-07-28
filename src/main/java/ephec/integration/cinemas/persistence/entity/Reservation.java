@@ -1,4 +1,4 @@
-package ephec.integration.cinemas.persistence.entities;
+package ephec.integration.cinemas.persistence.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,17 +12,16 @@ import java.util.Set;
 @Table(name = "reservation")
 public class Reservation {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "idReservation")
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "idReservation", nullable = false, updatable = false)
     private Integer reservationId;
 
     @Column(name = "dateReservation")
     private LocalDateTime reservationDateTime;
 
-    @ManyToOne
-    @JoinColumn(name="utilisateur_idUtilisateur")
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @OneToMany(mappedBy="reservation")
+    @OneToMany(mappedBy="reservation", cascade = CascadeType.ALL)
     private Set<Ticket> tickets;
 }

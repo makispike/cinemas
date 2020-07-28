@@ -1,4 +1,4 @@
-package ephec.integration.cinemas.persistence.entities;
+package ephec.integration.cinemas.persistence.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,8 +12,8 @@ import java.util.Set;
 @Table(name = "genre")
 public class Genre {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "idGenre")
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "idGenre", nullable = false, updatable = false)
     private Integer genreId;
 
     @Column(name = "libelleGenreFR")

@@ -1,5 +1,5 @@
 package ephec.integration.cinemas.rest.boundary;
-import ephec.integration.cinemas.persistence.controllers.ProfileRepository;
+import ephec.integration.cinemas.persistence.control.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.stereotype.Controller;
         import org.springframework.web.bind.annotation.GetMapping;

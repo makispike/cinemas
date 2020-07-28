@@ -1,4 +1,4 @@
-package ephec.integration.cinemas.persistence.entities;
+package ephec.integration.cinemas.persistence.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,9 +33,9 @@ public class Location {
     @Column(name = "urlPhotoComplexe")
     private String locationPhotoUrl;
 
-    @OneToMany(mappedBy="location")
+    @OneToMany(mappedBy="location", cascade = CascadeType.ALL)
     private Set<Venue> venues;
 
-    @OneToMany(mappedBy="location")
+    @OneToMany(mappedBy="location", cascade = CascadeType.ALL)
     private Set<PriceCategory> priceCategories;
 }

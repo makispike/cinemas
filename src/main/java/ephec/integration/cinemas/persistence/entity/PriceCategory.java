@@ -1,4 +1,4 @@
-package ephec.integration.cinemas.persistence.entities;
+package ephec.integration.cinemas.persistence.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,10 +28,9 @@ public class PriceCategory {
     @Column(name = "nomCategorieEN")
     private String priceCategoryNameEN;
 
-    @ManyToOne
-    @JoinColumn(name="complexe_idComplexe")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Location location;
 
-    @OneToMany(mappedBy="priceCategory")
+    @OneToMany(mappedBy="priceCategory", cascade = CascadeType.ALL)
     private Set<Ticket> tickets;
 }
