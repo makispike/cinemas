@@ -21,10 +21,10 @@ public class Venue {
     @Column(name = "nbPlacesSalle")
     private Integer venueSeatsAmount;
 
-    @OneToMany(mappedBy="venue")
+    @OneToMany(mappedBy="venue", cascade = CascadeType.ALL)
     private Set<Screening> screenings;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="complexe_idComplexe")
     private Location location;
 }

@@ -25,6 +25,6 @@ public class Genre {
     @Column(name = "libelleGenreEN")
     private Integer genreLabelEN;
 
-    @ManyToMany(mappedBy = "genres")
+    @ManyToMany(mappedBy = "genres", cascade = CascadeType.ALL)
     private Set<Movie> movies = new HashSet<>();
 }

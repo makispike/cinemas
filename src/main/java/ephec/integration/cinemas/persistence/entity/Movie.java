@@ -12,7 +12,7 @@ import java.util.Set;
 @Table(name = "film")
 public class Movie {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "idFilm")
     private Integer movieId;
 
@@ -37,7 +37,7 @@ public class Movie {
     @Column(name = "urlPhotoFilm")
     private String moviePictureUrl;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "film_has_genre",
             joinColumns = { @JoinColumn(name = "film_idFilm") },
@@ -45,7 +45,7 @@ public class Movie {
     )
     Set<Genre> genres = new HashSet<>();
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "film_has_version",
             joinColumns = { @JoinColumn(name = "film_idFilm") },

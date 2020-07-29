@@ -12,7 +12,7 @@ import java.util.Set;
 @Table(name = "categorie")
 public class PriceCategory {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "idCategorie")
     private Integer priceCategoryId;
 

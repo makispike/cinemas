@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name = "complexe")
 public class Location {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "idComplexe")
     private Integer locationId;
 

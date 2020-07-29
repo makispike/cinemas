@@ -12,13 +12,13 @@ import java.util.Set;
 @Table(name = "version")
 public class Version {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "idVersion")
     private Integer versionId;
 
     @Column(name = "libelleVersion")
     private String versionLabel;
 
-    @ManyToMany(mappedBy = "versions")
+    @ManyToMany(mappedBy = "versions", cascade = CascadeType.ALL)
     private Set<Movie> movies = new HashSet<>();
 }
