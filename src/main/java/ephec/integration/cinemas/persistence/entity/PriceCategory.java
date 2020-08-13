@@ -29,6 +29,7 @@ public class PriceCategory {
     private String priceCategoryNameEN;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="complexe_idComplexe")
     private Location location;
 
     @OneToMany(mappedBy="priceCategory", cascade = CascadeType.ALL)

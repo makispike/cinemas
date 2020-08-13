@@ -14,21 +14,6 @@ public class Profile {
     @Column(name = "idProfil")
     private Integer profileId;
 
-    @Column(name = "nomUtilisateur")
-    private String userLastName;
-
-    @Column(name = "prenomUtilisateur")
-    private String userFirstName;
-
-    @Column(name = "adresseUtilisateur")
-    private String userAddress;
-
-    @Column(name = "ageUtilisateur")
-    private Integer userAge;
-
-    @Column(name = "langueUtilisateur")
-    private String userLanguage;
-
     @Column(name = "pseudoUtilisateur")
     private String userNickname;
 

@@ -1,5 +1,7 @@
 package ephec.integration.cinemas.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +9,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "genreId")
 @Entity
 @Getter @Setter
 @Table(name = "genre")
@@ -17,13 +20,13 @@ public class Genre {
     private Integer genreId;
 
     @Column(name = "libelleGenreFR")
-    private Integer genreLabelFR;
+    private String genreLabelFR;
 
     @Column(name = "libelleGenreNL")
-    private Integer genreLabelNL;
+    private String genreLabelNL;
 
     @Column(name = "libelleGenreEN")
-    private Integer genreLabelEN;
+    private String genreLabelEN;
 
     @ManyToMany(mappedBy = "genres", cascade = CascadeType.ALL)
     private Set<Movie> movies = new HashSet<>();

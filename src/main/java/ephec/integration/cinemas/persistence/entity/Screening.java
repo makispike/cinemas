@@ -27,9 +27,11 @@ public class Screening {
     private Integer availableSeats;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="salle_idSalle")
     private Venue venue;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="film_idFilm")
     private Movie movie;
 
     @OneToMany(mappedBy="screening", cascade = CascadeType.ALL)

@@ -21,8 +21,20 @@ public class User {
     @Column(name = "roleUtilisateur")
     private String userRole;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private Profile profile;
+    @Column(name = "nomUtilisateur")
+    private String userLastName;
+
+    @Column(name = "prenomUtilisateur")
+    private String userFirstName;
+
+    @Column(name = "adresseUtilisateur")
+    private String userAddress;
+
+    @Column(name = "ageUtilisateur")
+    private Integer userAge;
+
+    @Column(name = "emailContactUtilisateur")
+    private String userContactEmail;
 
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
     private Set<Reservation> reservations;

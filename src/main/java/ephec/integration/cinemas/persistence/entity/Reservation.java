@@ -20,6 +20,7 @@ public class Reservation {
     private LocalDateTime reservationDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="utilisateur_idUtilisateur")
     private User user;
 
     @OneToMany(mappedBy="reservation", cascade = CascadeType.ALL)

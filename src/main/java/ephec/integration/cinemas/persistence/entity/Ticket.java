@@ -15,11 +15,14 @@ public class Ticket {
     private Integer ticketId;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="reservation_idReservation")
     private Reservation reservation;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="seance_idSeance")
     private Screening screening;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="categorie_idCategorie")
     private PriceCategory priceCategory;
 }
