@@ -1,11 +1,9 @@
 package ephec.integration.cinemas.persistence.control;
 
-import ephec.integration.cinemas.persistence.entity.Location;
 import ephec.integration.cinemas.persistence.entity.Screening;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.util.Set;
 
 @Getter

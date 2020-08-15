@@ -45,4 +45,10 @@ public class PriceCategoryResource {
                 });
     }
 
+    @CrossOrigin
+    @PostMapping(path="/new")
+    public PriceCategory createPriceCategory(@RequestBody PriceCategory priceCategory) {
+        return priceCategoryRepository.save(priceCategory);
+    }
+
 }

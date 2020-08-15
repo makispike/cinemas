@@ -1,5 +1,6 @@
 package ephec.integration.cinemas.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,8 +35,10 @@ public class Location {
     private String locationPhotoUrl;
 
     @OneToMany(mappedBy="location", cascade = CascadeType.ALL)
+    @JsonManagedReference(value="venue-location")
     private Set<Venue> venues;
 
     @OneToMany(mappedBy="location", cascade = CascadeType.ALL)
+    @JsonManagedReference(value="price-location")
     private Set<PriceCategory> priceCategories;
 }

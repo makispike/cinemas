@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -15,5 +14,5 @@ public class ScreeningDTO {
     private LocalTime screeningTime;
     private Integer availableSeats;
     private VenueDTO venue;
-    private List<MovieDTO> movies;
+    private MovieDTO movie;
 }

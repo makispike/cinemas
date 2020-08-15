@@ -1,5 +1,6 @@
 package ephec.integration.cinemas.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,13 +17,16 @@ public class Ticket {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="reservation_idReservation")
+    @JsonBackReference(value="ticket-reservation")
     private Reservation reservation;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="seance_idSeance")
+    @JsonBackReference(value="ticket-screening")
     private Screening screening;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="categorie_idCategorie")
+    @JsonBackReference(value="price-ticket")
     private PriceCategory priceCategory;
 }

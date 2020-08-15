@@ -42,19 +42,25 @@ public class ScreeningResource {
 
     @CrossOrigin
     @PutMapping(path="/update")
-    public Screening createOrUpdateScreening(@RequestBody Screening screeningToUpdateOrCreate) {
-        return screeningRepository.findById(screeningToUpdateOrCreate.getScreeningId())
+    public Screening updateScreening(@RequestBody Screening screeningToUpdate) {
+        return screeningRepository.findById(screeningToUpdate.getScreeningId())
                 .map(screening -> {
-                    screening.setMovie(screeningToUpdateOrCreate.getMovie());
-                    screening.setScreeningDate(screeningToUpdateOrCreate.getScreeningDate());
-                    screening.setScreeningTime(screeningToUpdateOrCreate.getScreeningTime());
-                    screening.setAvailableSeats(screeningToUpdateOrCreate.getAvailableSeats());
-                    screening.setVenue(screeningToUpdateOrCreate.getVenue());
+                    screening.setMovie(screeningToUpdate.getMovie());
+                    screening.setScreeningDate(screeningToUpdate.getScreeningDate()); // format YYYY-MM-DD
+                    screening.setScreeningTime(screeningToUpdate.getScreeningTime()); // format hh:mm:ss
+                    screening.setAvailableSeats(screeningToUpdate.getAvailableSeats());
+                    screening.setVenue(screeningToUpdate.getVenue());
                     return screeningRepository.save(screening);
                 })
                 .orElseGet(() -> {
-                    return screeningRepository.save(screeningToUpdateOrCreate);
+                    return screeningRepository.save(screeningToUpdate);
                 });
+    }
+
+    @CrossOrigin
+    @PostMapping(path="/new")
+    public Screening createScreening(@RequestBody Screening screening) {
+        return screeningRepository.save(screening);
     }
 
     @CrossOrigin

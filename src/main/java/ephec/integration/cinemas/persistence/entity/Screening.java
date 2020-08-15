@@ -1,5 +1,7 @@
 package ephec.integration.cinemas.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,12 +30,15 @@ public class Screening {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="salle_idSalle")
+    @JsonBackReference(value="venue-screening")
     private Venue venue;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="film_idFilm")
+    @JsonBackReference(value="movie-screening")
     private Movie movie;
 
     @OneToMany(mappedBy="screening", cascade = CascadeType.ALL)
+    @JsonManagedReference(value="ticket-screening")
     private Set<Ticket> tickets;
 }

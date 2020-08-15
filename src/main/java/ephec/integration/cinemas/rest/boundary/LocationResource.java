@@ -36,7 +36,7 @@ public class LocationResource {
     }
 
     @CrossOrigin
-    @PutMapping(path = "/register")
+    @PutMapping(path = "/update")
     public Location registerOrUpdateLocation(@RequestBody Location locationToCreateOrUpdate) {
         return locationRepository.findById(locationToCreateOrUpdate.getLocationId())
                 .map(location -> {
@@ -55,4 +55,11 @@ public class LocationResource {
                     return locationRepository.save(locationToCreateOrUpdate);
                 });
     }
+
+    @CrossOrigin
+    @PostMapping(path = "/new")
+    public Location newLocation(@RequestBody Location location) {
+        return locationRepository.save(location);
+    }
+
 }

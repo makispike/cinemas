@@ -35,4 +35,10 @@ public class VenueResource {
                     return venueRepository.save(venueToCreateOrUpdate);
                 });
     }
+
+    @CrossOrigin
+    @PostMapping(path = "/new")
+    public Venue createVenue(@RequestBody Venue venue) {
+        return venueRepository.save(venue);
+    }
 }

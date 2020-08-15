@@ -1,5 +1,7 @@
 package ephec.integration.cinemas.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,8 +32,10 @@ public class PriceCategory {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="complexe_idComplexe")
+    @JsonBackReference(value="price-location")
     private Location location;
 
     @OneToMany(mappedBy="priceCategory", cascade = CascadeType.ALL)
+    @JsonManagedReference(value="price-ticket")
     private Set<Ticket> tickets;
 }

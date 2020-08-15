@@ -1,5 +1,6 @@
 package ephec.integration.cinemas.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,6 +38,7 @@ public class User {
     private String userContactEmail;
 
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
+    @JsonManagedReference(value="user-reservation")
     private Set<Reservation> reservations;
 
 }
