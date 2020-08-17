@@ -5,6 +5,7 @@ import ephec.integration.cinemas.persistence.entity.Venue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+// Documentation about these endpoints can be found at {this application's URL}/swagger-ui.html
 @RestController
 @RequestMapping(path = "/venue")
 public class VenueResource {

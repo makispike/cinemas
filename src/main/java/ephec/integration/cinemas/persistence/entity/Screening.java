@@ -28,12 +28,12 @@ public class Screening {
     @Column(name = "nbPlacesDisponibles")
     private Integer availableSeats;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="salle_idSalle")
     @JsonBackReference(value="venue-screening")
     private Venue venue;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="film_idFilm")
     @JsonBackReference(value="movie-screening")
     private Movie movie;

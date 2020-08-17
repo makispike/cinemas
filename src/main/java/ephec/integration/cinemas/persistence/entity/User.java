@@ -19,9 +19,6 @@ public class User {
     @Column(name = "emailUtilisateur")
     private String userEmail;
 
-    @Column(name = "roleUtilisateur")
-    private String userRole;
-
     @Column(name = "nomUtilisateur")
     private String userLastName;
 

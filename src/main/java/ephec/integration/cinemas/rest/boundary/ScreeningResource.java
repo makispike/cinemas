@@ -1,8 +1,9 @@
 package ephec.integration.cinemas.rest.boundary;
 
-import ephec.integration.cinemas.persistence.boundary.GenreRepository;
-import ephec.integration.cinemas.persistence.boundary.MovieRepository;
-import ephec.integration.cinemas.persistence.boundary.ScreeningRepository;
+import ephec.integration.cinemas.persistence.boundary.*;
+import ephec.integration.cinemas.persistence.control.DTOUtils;
+import ephec.integration.cinemas.persistence.control.MovieDTO;
+import ephec.integration.cinemas.persistence.control.ScreeningDTO;
 import ephec.integration.cinemas.persistence.entity.Genre;
 import ephec.integration.cinemas.persistence.entity.Movie;
 import ephec.integration.cinemas.persistence.entity.Screening;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+// Documentation about these endpoints can be found at {this application's URL}/swagger-ui.html
 // REST controller for everything pertaining to the screenings resource
 @RestController
 @RequestMapping(path="/screening")
@@ -22,9 +24,15 @@ public class ScreeningResource {
 
     @Autowired
     private GenreRepository genreRepository;
+    @Autowired
+    private DTOUtils dtoUtils;
 
     @Autowired
     private MovieRepository movieRepository;
+    @Autowired
+    private TicketRepository ticketRepository;
+    @Autowired
+    private VenueRepository venueRepository;
 
     // The CrossOrigin annotation is necessary in order to avoid CORS errors which can be gotten because of a mismatch
     // between client and server
@@ -36,8 +44,24 @@ public class ScreeningResource {
 
     @CrossOrigin
     @GetMapping(path="/all")
-    public Iterable<Screening> getAllScreenings () {
-        return screeningRepository.findAll();
+    public List<ScreeningDTO> getAllScreenings () {
+        List<ScreeningDTO> screeningDTOList = new ArrayList<>();
+        for (Screening screening : screeningRepository.findAll()) {
+            ScreeningDTO screeningDTO;
+            screeningDTO = dtoUtils.getScreeningsDTO(screening);
+            screeningDTO.setVenue(dtoUtils.getVenueDTO(screening.getVenue()));
+            screeningDTO.getVenue().setLocation(dtoUtils.getLocationDTO(screening.getVenue().getLocation()));
+            screeningDTO.setMovie(dtoUtils.getMovieDTO(screening.getMovie()));
+            if (screening.getMovie().getGenres().size() != 0) {
+                screeningDTO.getMovie().setGenres(dtoUtils.getGenres(screening.getMovie().getGenres()));
+            }
+            if (screening.getMovie().getVersions().size() != 0) {
+                screeningDTO.getMovie().setVersions(dtoUtils.getVersions(screening.getMovie().getVersions()));
+            }
+            screeningDTOList.add(screeningDTO);
+        }
+
+        return screeningDTOList;
     }
 
     @CrossOrigin

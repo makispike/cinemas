@@ -4,9 +4,12 @@ import ephec.integration.cinemas.persistence.boundary.LocationRepository;
 import ephec.integration.cinemas.persistence.boundary.PriceCategoryRepository;
 import ephec.integration.cinemas.persistence.boundary.VenueRepository;
 import ephec.integration.cinemas.persistence.entity.Location;
+import ephec.integration.cinemas.persistence.entity.PriceCategory;
+import ephec.integration.cinemas.persistence.entity.Venue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+// Documentation about these endpoints can be found at {this application's URL}/swagger-ui.html
 @RestController
 @RequestMapping(path = "/location")
 public class LocationResource {
@@ -46,8 +49,29 @@ public class LocationResource {
                     location.setLocationDescriptionFR(locationToCreateOrUpdate.getLocationDescriptionFR());
                     location.setLocationDescriptionNL(locationToCreateOrUpdate.getLocationDescriptionNL());
                     location.setLocationPhotoUrl(locationToCreateOrUpdate.getLocationPhotoUrl());
-                    if (locationToCreateOrUpdate.getVenues() != null) {
-                        location.setVenues(locationToCreateOrUpdate.getVenues());
+                    if (locationToCreateOrUpdate.getVenues() != null) { // we need to take into account that a venue might already exist or we're going to have issues persisting
+                        for (Venue venue : locationToCreateOrUpdate.getVenues()) {
+                            venueRepository.findByVenueIdAndLocation_LocationId(venue.getVenueId(), location.getLocationId())
+                                    .map(foundVenue -> {
+                                        foundVenue.setVenueSeatsAmount(venue.getVenueSeatsAmount());
+                                        foundVenue.setVenueNumber(venue.getVenueNumber());
+                                        return venueRepository.save(foundVenue);
+                                    })
+                                    .orElseGet(() -> venueRepository.save(venue));
+                        }
+                    }
+                    if (locationToCreateOrUpdate.getPriceCategories() != null) {
+                        for (PriceCategory priceCategory : locationToCreateOrUpdate.getPriceCategories()) {
+                            priceCategoryRepository.findByPriceCategoryIdAndLocation_LocationId(priceCategory.getPriceCategoryId(), location.getLocationId())
+                                    .map(foundPriceCategory -> {
+                                        foundPriceCategory.setPriceCategoryPrice(priceCategory.getPriceCategoryPrice());
+                                        foundPriceCategory.setPriceCategoryNameEN(priceCategory.getPriceCategoryNameEN());
+                                        foundPriceCategory.setPriceCategoryNameFR(priceCategory.getPriceCategoryNameFR());
+                                        foundPriceCategory.setPriceCategoryNameNL(priceCategory.getPriceCategoryNameNL());
+                                        return priceCategoryRepository.save(foundPriceCategory);
+                                    })
+                                    .orElseGet(() -> priceCategoryRepository.save(priceCategory));
+                        }
                     }
                     return locationRepository.save(location);
                 })

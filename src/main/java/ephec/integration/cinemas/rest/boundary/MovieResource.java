@@ -1,12 +1,8 @@
 package ephec.integration.cinemas.rest.boundary;
 
-import ephec.integration.cinemas.persistence.boundary.MovieRepository;
-import ephec.integration.cinemas.persistence.control.GenreDTO;
-import ephec.integration.cinemas.persistence.control.MovieDTO;
-import ephec.integration.cinemas.persistence.control.VersionDTO;
-import ephec.integration.cinemas.persistence.entity.Genre;
-import ephec.integration.cinemas.persistence.entity.Movie;
-import ephec.integration.cinemas.persistence.entity.Version;
+import ephec.integration.cinemas.persistence.boundary.*;
+import ephec.integration.cinemas.persistence.control.*;
+import ephec.integration.cinemas.persistence.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,28 +10,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+// Documentation about these endpoints can be found at {this application's URL}/swagger-ui.html
 @RestController
 @RequestMapping(path="/movies") // This means URL's start with /demo (after Application path)
 public class MovieResource {
     @Autowired
     private MovieRepository movieRepository;
+    @Autowired
+    private VersionRepository versionRepository;
+    @Autowired
+    private GenreRepository genreRepository;
+    @Autowired
+    private ScreeningRepository screeningRepository;
+    @Autowired
+    private DTOUtils dtoUtils;
 
     @CrossOrigin
     @GetMapping(path="/all")
     public List<MovieDTO> getAllMovies () {
         List<MovieDTO> movieDTOList = new ArrayList<>();
         for (Movie movie : movieRepository.findAll()) {
-            MovieDTO movieDTO = new MovieDTO();
-            movieDTO.setMovieId(movie.getMovieId());
-            movieDTO.setMovieDescriptionEN(movie.getMovieDescriptionEN());
-            movieDTO.setMovieDescriptionFR(movie.getMovieDescriptionFR());
-            movieDTO.setMovieDescriptionNL(movie.getMovieDescriptionNL());
-            movieDTO.setMovieNameEN(movie.getMovieNameEN());
-            movieDTO.setMovieNameFR(movie.getMovieNameFR());
-            movieDTO.setMovieNameNL(movie.getMovieNameNL());
-            movieDTO.setMoviePictureUrl(movie.getMoviePictureUrl());
-            movieDTO.setGenres(getGenres(movie.getGenres()));
-            movieDTO.setVersions(getVersions(movie.getVersions()));
+            MovieDTO movieDTO = dtoUtils.getMovieDTO(movie);
+            movieDTO.setGenres(dtoUtils.getGenres(movie.getGenres()));
+            movieDTO.setVersions(dtoUtils.getVersions(movie.getVersions()));
+            List<ScreeningDTO> screeningDTOS = new ArrayList<>();
+            for (Screening screening : movie.getScreenings()) {
+                screeningDTOS.add(dtoUtils.getScreeningsDTO(screening));
+            }
+            movieDTO.setScreenings(screeningDTOS);
             movieDTOList.add(movieDTO);
         }
         return movieDTOList;
@@ -55,7 +57,7 @@ public class MovieResource {
 
     @CrossOrigin
     @PutMapping(path="/update")
-    public Movie createOrUpdateScreening(@RequestBody Movie movieToCreateOrUpdate) {
+    public Movie createOrUpdateMovie(@RequestBody Movie movieToCreateOrUpdate) {
         return movieRepository.findById(movieToCreateOrUpdate.getMovieId())
                 .map(movie -> {
                     movie.setMovieNameEN(movieToCreateOrUpdate.getMovieNameEN());
@@ -65,6 +67,7 @@ public class MovieResource {
                     movie.setMovieDescriptionFR(movieToCreateOrUpdate.getMovieDescriptionFR());
                     movie.setMovieDescriptionNL(movieToCreateOrUpdate.getMovieDescriptionNL());
                     movie.setMoviePictureUrl(movieToCreateOrUpdate.getMoviePictureUrl());
+                    movie.setScreenings(movieToCreateOrUpdate.getScreenings());
                     movie.setVersions(movieToCreateOrUpdate.getVersions());
                     movie.setGenres(movieToCreateOrUpdate.getGenres());
                     return movieRepository.save(movie);
@@ -72,30 +75,6 @@ public class MovieResource {
                 .orElseGet(() -> {
                     return movieRepository.save(movieToCreateOrUpdate);
                 });
-    }
-
-    private List<VersionDTO> getVersions(Set<Version> set) {
-        List<VersionDTO> versionDTOs = new ArrayList<>();
-        for (Version version : set) {
-            VersionDTO versionDTO = new VersionDTO();
-            versionDTO.setVersionId(version.getVersionId());
-            versionDTO.setVersionLabel(version.getVersionLabel());
-            versionDTOs.add(versionDTO);
-        }
-        return versionDTOs;
-    }
-
-    private List<GenreDTO> getGenres(Set<Genre> set) {
-        List<GenreDTO> genreDTOs = new ArrayList<>();
-        for (Genre genre : set) {
-            GenreDTO genreDTO = new GenreDTO();
-            genreDTO.setGenreId(genre.getGenreId());
-            genreDTO.setGenreLabelEN(genre.getGenreLabelEN());
-            genreDTO.setGenreLabelFR(genre.getGenreLabelFR());
-            genreDTO.setGenreLabelNL(genre.getGenreLabelNL());
-            genreDTOs.add(genreDTO);
-        }
-        return genreDTOs;
     }
 
 //    @GetMapping(path="/all")
