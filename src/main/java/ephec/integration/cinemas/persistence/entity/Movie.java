@@ -20,13 +20,13 @@ public class Movie {
     @Column(name = "idFilm")
     private Integer movieId;
 
-    @Column(name = "nomFilmFR")
+    @Column(name = "nomFilmFR", nullable = false, unique = true)
     private String movieNameFR;
 
-    @Column(name = "nomFilmNL")
+    @Column(name = "nomFilmNL", nullable = false, unique = true)
     private String movieNameNL;
 
-    @Column(name = "nomFilmEN")
+    @Column(name = "nomFilmEN", nullable = false, unique = true)
     private String movieNameEN;
 
     @Column(name = "descriptionFR")

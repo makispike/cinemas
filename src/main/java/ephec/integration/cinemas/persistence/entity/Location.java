@@ -16,7 +16,7 @@ public class Location {
     @Column(name = "idComplexe")
     private Integer locationId;
 
-    @Column(name = "nomComplexe")
+    @Column(name = "nomComplexe", nullable = false, unique = true)
     private String locationName;
 
     @Column(name = "adresseComplexe")

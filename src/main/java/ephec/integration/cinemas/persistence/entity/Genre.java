@@ -19,13 +19,13 @@ public class Genre {
     @Column(name = "idGenre", nullable = false, updatable = false)
     private Integer genreId;
 
-    @Column(name = "libelleGenreFR")
+    @Column(name = "libelleGenreFR", nullable = false, unique = true)
     private String genreLabelFR;
 
-    @Column(name = "libelleGenreNL")
+    @Column(name = "libelleGenreNL", nullable = false, unique = true)
     private String genreLabelNL;
 
-    @Column(name = "libelleGenreEN")
+    @Column(name = "libelleGenreEN", nullable = false, unique = true)
     private String genreLabelEN;
 
     @ManyToMany(mappedBy = "genres", cascade = CascadeType.ALL)

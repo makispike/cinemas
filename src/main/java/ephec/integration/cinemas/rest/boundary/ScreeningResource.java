@@ -23,15 +23,12 @@ public class ScreeningResource {
 
     @Autowired
     private GenreRepository genreRepository;
-    @Autowired
-    private DTOUtils dtoUtils;
 
     @Autowired
     private MovieRepository movieRepository;
+
     @Autowired
-    private TicketRepository ticketRepository;
-    @Autowired
-    private VenueRepository venueRepository;
+    private DTOUtils dtoUtils;
 
     // The CrossOrigin annotation is necessary in order to avoid CORS errors which can be gotten because of a mismatch
     // between client and server
@@ -97,8 +94,12 @@ public class ScreeningResource {
 
     @CrossOrigin
     @GetMapping(path="/bydate/{date}")
-    public Iterable<Screening> findScreeningsByDate(@PathVariable String date) {
-        return screeningRepository.findByScreeningDateOrderByScreeningId(LocalDate.parse(date));
+    public List<ScreeningDTO> findScreeningsByDate(@PathVariable String date) {
+        List<ScreeningDTO> screeningsForDate = new ArrayList<>();
+        for (Screening screening : screeningRepository.findByScreeningDateOrderByScreeningId(LocalDate.parse(date))) {
+            screeningsForDate.add(createScreeningDTO(screening));
+        }
+        return screeningsForDate;
     }
 
     @CrossOrigin

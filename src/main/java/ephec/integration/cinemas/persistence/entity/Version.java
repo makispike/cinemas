@@ -19,7 +19,7 @@ public class Version {
     @Column(name = "idVersion")
     private Integer versionId;
 
-    @Column(name = "libelleVersion")
+    @Column(name = "libelleVersion", updatable = false, nullable = false, unique = true)
     private String versionLabel;
 
     @ManyToMany(mappedBy = "versions", cascade = CascadeType.ALL)

@@ -21,13 +21,13 @@ public class PriceCategory {
     @Column(name = "prixCategorie")
     private BigDecimal priceCategoryPrice;
 
-    @Column(name = "nomCategorieFR")
+    @Column(name = "nomCategorieFR", nullable = false, unique = true)
     private String priceCategoryNameFR;
 
-    @Column(name = "nomCategorieNL")
+    @Column(name = "nomCategorieNL", nullable = false, unique = true)
     private String priceCategoryNameNL;
 
-    @Column(name = "nomCategorieEN")
+    @Column(name = "nomCategorieEN", nullable = false, unique = true)
     private String priceCategoryNameEN;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -1,14 +1,16 @@
 package ephec.integration.cinemas.rest.boundary;
 
-import ephec.integration.cinemas.persistence.boundary.*;
+import ephec.integration.cinemas.persistence.boundary.MovieRepository;
 import ephec.integration.cinemas.persistence.control.*;
-import ephec.integration.cinemas.persistence.entity.*;
+import ephec.integration.cinemas.persistence.entity.Genre;
+import ephec.integration.cinemas.persistence.entity.Movie;
+import ephec.integration.cinemas.persistence.entity.Screening;
+import ephec.integration.cinemas.persistence.entity.Version;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 // Documentation about these endpoints can be found at {this application's URL}/swagger-ui.html
 @RestController
@@ -16,12 +18,6 @@ import java.util.Set;
 public class MovieResource {
     @Autowired
     private MovieRepository movieRepository;
-    @Autowired
-    private VersionRepository versionRepository;
-    @Autowired
-    private GenreRepository genreRepository;
-    @Autowired
-    private ScreeningRepository screeningRepository;
     @Autowired
     private DTOUtils dtoUtils;
 
@@ -84,10 +80,4 @@ public class MovieResource {
                     return movieRepository.save(movieToCreateOrUpdate);
                 });
     }
-
-//    @GetMapping(path="/all")
-//    public @ResponseBody Iterable<User> getAllUsers() {
-//        // This returns a JSON or XML with the users
-//        return userRepository.findAll();
-//    }
 }
