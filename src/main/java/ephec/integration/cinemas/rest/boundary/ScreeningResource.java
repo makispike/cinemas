@@ -1,11 +1,10 @@
 package ephec.integration.cinemas.rest.boundary;
 
 import ephec.integration.cinemas.persistence.boundary.*;
-import ephec.integration.cinemas.persistence.control.DTOUtils;
-import ephec.integration.cinemas.persistence.control.MovieDTO;
-import ephec.integration.cinemas.persistence.control.ScreeningDTO;
+import ephec.integration.cinemas.persistence.control.*;
 import ephec.integration.cinemas.persistence.entity.Genre;
 import ephec.integration.cinemas.persistence.entity.Movie;
+import ephec.integration.cinemas.persistence.entity.PriceCategory;
 import ephec.integration.cinemas.persistence.entity.Screening;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +37,8 @@ public class ScreeningResource {
     // between client and server
     @CrossOrigin
     @GetMapping(path="/{id}")
-    public Screening getScreeningById (@PathVariable Integer id) {
-        return screeningRepository.findById(id).orElse(null);
+    public ScreeningDTO getScreeningById (@PathVariable Integer id) {
+        return createScreeningDTO(screeningRepository.findById(id).orElse(null));
     }
 
     @CrossOrigin
@@ -47,20 +46,8 @@ public class ScreeningResource {
     public List<ScreeningDTO> getAllScreenings () {
         List<ScreeningDTO> screeningDTOList = new ArrayList<>();
         for (Screening screening : screeningRepository.findAll()) {
-            ScreeningDTO screeningDTO;
-            screeningDTO = dtoUtils.getScreeningsDTO(screening);
-            screeningDTO.setVenue(dtoUtils.getVenueDTO(screening.getVenue()));
-            screeningDTO.getVenue().setLocation(dtoUtils.getLocationDTO(screening.getVenue().getLocation()));
-            screeningDTO.setMovie(dtoUtils.getMovieDTO(screening.getMovie()));
-            if (screening.getMovie().getGenres().size() != 0) {
-                screeningDTO.getMovie().setGenres(dtoUtils.getGenres(screening.getMovie().getGenres()));
-            }
-            if (screening.getMovie().getVersions().size() != 0) {
-                screeningDTO.getMovie().setVersions(dtoUtils.getVersions(screening.getMovie().getVersions()));
-            }
-            screeningDTOList.add(screeningDTO);
+            screeningDTOList.add(createScreeningDTO(screening));
         }
-
         return screeningDTOList;
     }
 
@@ -129,6 +116,29 @@ public class ScreeningResource {
             return null;
         }
         return screeningRepository.findByMovie_MovieId(movie.getMovieId());
+    }
+
+    private ScreeningDTO createScreeningDTO(Screening screening) {
+        if (screening == null) {
+            return null;
+        }
+        List<GenreDTO> genreDTOs = new ArrayList<>();
+        List<PriceCategoryDTO> priceCategoryDTOs = new ArrayList<>();
+        ScreeningDTO screeningDTO;
+        screeningDTO = dtoUtils.getScreeningsDTO(screening);
+        screeningDTO.setVenue(dtoUtils.getVenueDTO(screening.getVenue()));
+        screeningDTO.getVenue().setLocation(dtoUtils.getLocationDTO(screening.getVenue().getLocation()));
+        screeningDTO.setMovie(dtoUtils.getMovieDTO(screening.getMovie()));
+        for (Genre genre : screening.getMovie().getGenres()) {
+            genreDTOs.add(dtoUtils.getGenre(genre));
+        }
+        screeningDTO.getMovie().setGenres(genreDTOs);
+        for (PriceCategory priceCategory : screening.getVenue().getLocation().getPriceCategories()) {
+            priceCategoryDTOs.add(dtoUtils.getPriceCategoryDTO(priceCategory));
+        }
+        screeningDTO.getVenue().getLocation().setPriceCategories(priceCategoryDTOs);
+        screeningDTO.setVersion(dtoUtils.getVersion(screening.getVersion()));
+        return screeningDTO;
     }
 
 }

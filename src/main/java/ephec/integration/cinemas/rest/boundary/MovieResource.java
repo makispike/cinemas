@@ -30,10 +30,18 @@ public class MovieResource {
     public List<MovieDTO> getAllMovies () {
         List<MovieDTO> movieDTOList = new ArrayList<>();
         for (Movie movie : movieRepository.findAll()) {
-            MovieDTO movieDTO = dtoUtils.getMovieDTO(movie);
-            movieDTO.setGenres(dtoUtils.getGenres(movie.getGenres()));
-            movieDTO.setVersions(dtoUtils.getVersions(movie.getVersions()));
+            List<GenreDTO> genreDTOs = new ArrayList<>();
+            List<VersionDTO> versions = new ArrayList<>();
             List<ScreeningDTO> screeningDTOS = new ArrayList<>();
+            MovieDTO movieDTO = dtoUtils.getMovieDTO(movie);
+            for (Genre genre : movie.getGenres()) {
+                genreDTOs.add(dtoUtils.getGenre(genre));
+            }
+            movieDTO.setGenres(genreDTOs);
+            for (Version version : movie.getVersions()) {
+                versions.add(dtoUtils.getVersion(version));
+            }
+            movieDTO.setVersions(versions);
             for (Screening screening : movie.getScreenings()) {
                 screeningDTOS.add(dtoUtils.getScreeningsDTO(screening));
             }

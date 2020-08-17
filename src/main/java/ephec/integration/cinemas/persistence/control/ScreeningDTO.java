@@ -15,4 +15,5 @@ public class ScreeningDTO {
     private Integer availableSeats;
     private VenueDTO venue;
     private MovieDTO movie;
+    private VersionDTO version;
 }

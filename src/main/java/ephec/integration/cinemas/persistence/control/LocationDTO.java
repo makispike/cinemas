@@ -1,6 +1,5 @@
 package ephec.integration.cinemas.persistence.control;
 
-import ephec.integration.cinemas.persistence.entity.PriceCategory;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +16,6 @@ public class LocationDTO {
     private String locationDescriptionEN;
     private String locationPhotoUrl;
     private List<VenueDTO> venues;
-    private List<PriceCategory> priceCategories;
+    private List<PriceCategoryDTO> priceCategories;
 
 }

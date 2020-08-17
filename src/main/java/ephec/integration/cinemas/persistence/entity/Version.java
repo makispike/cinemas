@@ -24,4 +24,7 @@ public class Version {
 
     @ManyToMany(mappedBy = "versions", cascade = CascadeType.ALL)
     private Set<Movie> movies = new HashSet<>();
+
+    @OneToOne(mappedBy = "version")
+    private Screening screening;
 }

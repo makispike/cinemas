@@ -41,4 +41,8 @@ public class Screening {
     @OneToMany(mappedBy="screening", cascade = CascadeType.ALL)
     @JsonManagedReference(value="ticket-screening")
     private Set<Ticket> tickets;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="version_idVersion", referencedColumnName = "idVersion")
+    private Version version;
 }

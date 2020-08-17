@@ -9,28 +9,20 @@ import java.util.Set;
 
 @Controller
 public class DTOUtils {
-    public List<VersionDTO> getVersions(Set<Version> set) {
-        List<VersionDTO> versionDTOs = new ArrayList<>();
-        for (Version version : set) {
-            VersionDTO versionDTO = new VersionDTO();
-            versionDTO.setVersionId(version.getVersionId());
-            versionDTO.setVersionLabel(version.getVersionLabel());
-            versionDTOs.add(versionDTO);
-        }
-        return versionDTOs;
+    public VersionDTO getVersion(Version version) {
+        VersionDTO versionDTO = new VersionDTO();
+        versionDTO.setVersionId(version.getVersionId());
+        versionDTO.setVersionLabel(version.getVersionLabel());
+        return versionDTO;
     }
 
-    public List<GenreDTO> getGenres(Set<Genre> set) {
-        List<GenreDTO> genreDTOs = new ArrayList<>();
-        for (Genre genre : set) {
-            GenreDTO genreDTO = new GenreDTO();
-            genreDTO.setGenreId(genre.getGenreId());
-            genreDTO.setGenreLabelEN(genre.getGenreLabelEN());
-            genreDTO.setGenreLabelFR(genre.getGenreLabelFR());
-            genreDTO.setGenreLabelNL(genre.getGenreLabelNL());
-            genreDTOs.add(genreDTO);
-        }
-        return genreDTOs;
+    public GenreDTO getGenre(Genre genre) {
+        GenreDTO genreDTO = new GenreDTO();
+        genreDTO.setGenreId(genre.getGenreId());
+        genreDTO.setGenreLabelEN(genre.getGenreLabelEN());
+        genreDTO.setGenreLabelFR(genre.getGenreLabelFR());
+        genreDTO.setGenreLabelNL(genre.getGenreLabelNL());
+        return genreDTO;
     }
 
     public ScreeningDTO getScreeningsDTO(Screening screening) {
@@ -73,5 +65,40 @@ public class DTOUtils {
         locationDTO.setLocationDescriptionNL(location.getLocationDescriptionNL());
         locationDTO.setLocationPhotoUrl(location.getLocationPhotoUrl());
         return locationDTO;
+    }
+
+    public PriceCategoryDTO getPriceCategoryDTO(PriceCategory priceCategory) {
+        PriceCategoryDTO priceCategoryDTO = new PriceCategoryDTO();
+        priceCategoryDTO.setPriceCategoryId(priceCategory.getPriceCategoryId());
+        priceCategoryDTO.setPriceCategoryNameEN(priceCategory.getPriceCategoryNameEN());
+        priceCategoryDTO.setPriceCategoryNameFR(priceCategory.getPriceCategoryNameFR());
+        priceCategoryDTO.setPriceCategoryNameNL(priceCategory.getPriceCategoryNameNL());
+        priceCategoryDTO.setPriceCategoryPrice(priceCategory.getPriceCategoryPrice());
+        return priceCategoryDTO;
+    }
+
+    public ReservationDTO getReservationDTO(Reservation reservation) {
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setReservationId(reservation.getReservationId());
+        reservationDTO.setReservationDateTime(reservation.getReservationDateTime());
+        return reservationDTO;
+    }
+
+    public TicketDTO getTicketDTO(Ticket ticket) {
+        TicketDTO ticketDTO = new TicketDTO();
+        ticketDTO.setTicketId(ticket.getTicketId());
+        return ticketDTO;
+    }
+
+    public UserDTO getUserDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(user.getUserId());
+        userDTO.setUserEmail(user.getUserEmail());
+        userDTO.setUserFirstName(user.getUserFirstName());
+        userDTO.setUserLastName(user.getUserLastName());
+        userDTO.setUserAddress(user.getUserAddress());
+        userDTO.setUserAge(user.getUserAge());
+        userDTO.setUserContactEmail(user.getUserContactEmail());
+        return userDTO;
     }
 }
