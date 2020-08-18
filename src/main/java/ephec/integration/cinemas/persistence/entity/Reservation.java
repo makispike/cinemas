@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -23,6 +24,9 @@ public class Reservation {
 
     @Column(name = "dateReservation")
     private LocalDateTime reservationDateTime;
+
+    @Column(name = "prixTotalReservation")
+    private BigDecimal totalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="utilisateur_idUtilisateur")

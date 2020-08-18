@@ -3,10 +3,6 @@ package ephec.integration.cinemas.persistence.control;
 import ephec.integration.cinemas.persistence.entity.*;
 import org.springframework.stereotype.Controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 @Controller
 public class DTOUtils {
     public VersionDTO getVersion(Version version) {
@@ -81,6 +77,7 @@ public class DTOUtils {
         ReservationDTO reservationDTO = new ReservationDTO();
         reservationDTO.setReservationId(reservation.getReservationId());
         reservationDTO.setReservationDateTime(reservation.getReservationDateTime());
+        reservationDTO.setTotalPrice(reservation.getTotalPrice());
         return reservationDTO;
     }
 

@@ -41,7 +41,7 @@ public class Movie {
     @Column(name = "urlPhotoFilm")
     private String moviePictureUrl;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "film_has_genre",
             joinColumns = { @JoinColumn(name = "film_idFilm") },
@@ -49,7 +49,7 @@ public class Movie {
     )
     Set<Genre> genres = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "film_has_version",
             joinColumns = { @JoinColumn(name = "film_idFilm") },
@@ -57,7 +57,7 @@ public class Movie {
     )
     Set<Version> versions = new HashSet<>();
 
-    @OneToMany(mappedBy="movie", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="movie", cascade = CascadeType.MERGE)
     @JsonManagedReference(value="movie-screening")
     private Set<Screening> screenings;
 }

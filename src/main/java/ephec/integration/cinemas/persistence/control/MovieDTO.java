@@ -3,11 +3,13 @@ package ephec.integration.cinemas.persistence.control;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Id;
 import java.util.List;
 
 @Getter
 @Setter
 public class MovieDTO {
+    @Id
     private Integer movieId;
     private String movieNameFR;
     private String movieNameNL;

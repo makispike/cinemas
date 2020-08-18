@@ -15,7 +15,7 @@ public class Ticket {
     @Column(name = "idTicket", nullable = false, updatable = false)
     private Integer ticketId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="reservation_idReservation")
     @JsonBackReference(value="ticket-reservation")
     private Reservation reservation;

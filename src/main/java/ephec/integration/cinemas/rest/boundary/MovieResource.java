@@ -55,8 +55,8 @@ public class MovieResource {
 
     @CrossOrigin
     @PostMapping(path="/create")
-    public Movie newMovie(@RequestBody Movie newMovie) {
-        return movieRepository.save(newMovie);
+    public Movie createMovie(@DTO(MovieDTO.class) Movie movie) {
+        return movieRepository.save(movie);
     }
 
     @CrossOrigin

@@ -38,11 +38,11 @@ public class Screening {
     @JsonBackReference(value="movie-screening")
     private Movie movie;
 
-    @OneToMany(mappedBy="screening", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="screening")
     @JsonManagedReference(value="ticket-screening")
     private Set<Ticket> tickets;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="version_idVersion", referencedColumnName = "idVersion")
     private Version version;
 }
