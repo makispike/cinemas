@@ -1,4 +1,4 @@
-package ephec.integration.cinemas.persistence.control;
+package ephec.integration.cinemas.persistence.entity;
 
 import lombok.Getter;
 import lombok.Setter;

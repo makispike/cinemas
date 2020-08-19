@@ -1,9 +1,11 @@
 package ephec.integration.cinemas.rest.boundary;
 
-import ephec.integration.cinemas.persistence.boundary.VenueRepository;
+import ephec.integration.cinemas.persistence.control.VenueRepository;
 import ephec.integration.cinemas.persistence.entity.Venue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
 
 // Documentation about these endpoints can be found at {this application's URL}/swagger-ui.html
 @RestController
@@ -26,6 +28,7 @@ public class VenueResource {
 
     @CrossOrigin
     @PutMapping(path = "/update")
+    @RolesAllowed({"cinemas-admin", "admin"})
     public Venue updateVenue(@RequestBody Venue venueToCreateOrUpdate) {
         return venueRepository.findById(venueToCreateOrUpdate.getVenueId())
                 .map(venue -> {

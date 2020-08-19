@@ -1,4 +1,4 @@
-package ephec.integration.cinemas;
+package ephec.integration.cinemas.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ephec.integration.cinemas.persistence.control.DTOModelMapper;

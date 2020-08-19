@@ -1,4 +1,4 @@
-package ephec.integration.cinemas.persistence.boundary;
+package ephec.integration.cinemas.persistence.control;
 
 import ephec.integration.cinemas.persistence.entity.User;
 import org.springframework.data.repository.CrudRepository;

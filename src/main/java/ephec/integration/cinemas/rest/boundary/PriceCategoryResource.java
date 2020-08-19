@@ -1,9 +1,11 @@
 package ephec.integration.cinemas.rest.boundary;
 
-import ephec.integration.cinemas.persistence.boundary.PriceCategoryRepository;
+import ephec.integration.cinemas.persistence.control.PriceCategoryRepository;
 import ephec.integration.cinemas.persistence.entity.PriceCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
 
 // Documentation about these endpoints can be found at {this application's URL}/swagger-ui.html
 @RestController
@@ -32,6 +34,7 @@ public class PriceCategoryResource {
 
     @CrossOrigin
     @PutMapping(path="/update")
+    @RolesAllowed({"cinemas-admin", "admin"})
     public PriceCategory createOrUpdatePriceCategory(@RequestBody PriceCategory priceCategoryToUpdateOrCreate) {
         return priceCategoryRepository.findById(priceCategoryToUpdateOrCreate.getPriceCategoryId())
                 .map(priceCategory -> {
@@ -48,6 +51,7 @@ public class PriceCategoryResource {
 
     @CrossOrigin
     @PostMapping(path="/new")
+    @RolesAllowed({"cinemas-admin", "admin"})
     public PriceCategory createPriceCategory(@RequestBody PriceCategory priceCategory) {
         return priceCategoryRepository.save(priceCategory);
     }

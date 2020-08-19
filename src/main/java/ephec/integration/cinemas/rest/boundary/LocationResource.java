@@ -1,13 +1,15 @@
 package ephec.integration.cinemas.rest.boundary;
 
-import ephec.integration.cinemas.persistence.boundary.LocationRepository;
-import ephec.integration.cinemas.persistence.boundary.PriceCategoryRepository;
-import ephec.integration.cinemas.persistence.boundary.VenueRepository;
+import ephec.integration.cinemas.persistence.control.LocationRepository;
+import ephec.integration.cinemas.persistence.control.PriceCategoryRepository;
+import ephec.integration.cinemas.persistence.control.VenueRepository;
 import ephec.integration.cinemas.persistence.entity.Location;
 import ephec.integration.cinemas.persistence.entity.PriceCategory;
 import ephec.integration.cinemas.persistence.entity.Venue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
 
 // Documentation about these endpoints can be found at {this application's URL}/swagger-ui.html
 @RestController
@@ -40,6 +42,7 @@ public class LocationResource {
 
     @CrossOrigin
     @PutMapping(path = "/update")
+    @RolesAllowed({"cinemas-admin", "admin"})
     public Location registerOrUpdateLocation(@RequestBody Location locationToCreateOrUpdate) {
         return locationRepository.findById(locationToCreateOrUpdate.getLocationId())
                 .map(location -> {
@@ -82,6 +85,7 @@ public class LocationResource {
 
     @CrossOrigin
     @PostMapping(path = "/new")
+    @RolesAllowed({"cinemas-admin", "admin"})
     public Location newLocation(@RequestBody Location location) {
         return locationRepository.save(location);
     }

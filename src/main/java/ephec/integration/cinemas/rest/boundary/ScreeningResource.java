@@ -1,7 +1,12 @@
 package ephec.integration.cinemas.rest.boundary;
 
-import ephec.integration.cinemas.persistence.boundary.*;
-import ephec.integration.cinemas.persistence.control.*;
+import ephec.integration.cinemas.persistence.control.GenreRepository;
+import ephec.integration.cinemas.persistence.control.MovieRepository;
+import ephec.integration.cinemas.persistence.control.ScreeningRepository;
+import ephec.integration.cinemas.persistence.control.DTOUtils;
+import ephec.integration.cinemas.persistence.entity.GenreDTO;
+import ephec.integration.cinemas.persistence.entity.PriceCategoryDTO;
+import ephec.integration.cinemas.persistence.entity.ScreeningDTO;
 import ephec.integration.cinemas.persistence.entity.Genre;
 import ephec.integration.cinemas.persistence.entity.Movie;
 import ephec.integration.cinemas.persistence.entity.PriceCategory;

@@ -28,9 +28,6 @@ public class User {
     @Column(name = "adresseUtilisateur")
     private String userAddress;
 
-    @Column(name = "ageUtilisateur")
-    private Integer userAge;
-
     @Column(name = "emailContactUtilisateur")
     private String userContactEmail;
 

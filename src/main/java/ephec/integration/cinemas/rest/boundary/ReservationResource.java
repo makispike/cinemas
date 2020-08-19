@@ -1,15 +1,14 @@
 package ephec.integration.cinemas.rest.boundary;
 
-import ephec.integration.cinemas.persistence.boundary.ReservationRepository;
-import ephec.integration.cinemas.persistence.boundary.ScreeningRepository;
-import ephec.integration.cinemas.persistence.boundary.TicketRepository;
+import ephec.integration.cinemas.persistence.control.ReservationRepository;
+import ephec.integration.cinemas.persistence.control.ScreeningRepository;
+import ephec.integration.cinemas.persistence.control.TicketRepository;
 import ephec.integration.cinemas.persistence.control.*;
-import ephec.integration.cinemas.persistence.entity.Reservation;
-import ephec.integration.cinemas.persistence.entity.Screening;
-import ephec.integration.cinemas.persistence.entity.Ticket;
+import ephec.integration.cinemas.persistence.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +27,7 @@ public class ReservationResource {
 
     @CrossOrigin
     @GetMapping(path = "/all")
+    @RolesAllowed({"cinemas-admin", "admin"})
     public List<ReservationDTO> getAllReservations() {
         List<ReservationDTO> reservationDTOs = new ArrayList<>();
         for (Reservation reservation : reservationRepository.findAll()) {
@@ -38,18 +38,21 @@ public class ReservationResource {
 
     @CrossOrigin
     @GetMapping(path = "/{id}")
+    @RolesAllowed({"cinemas-admin", "admin", "cinemas-user", "user"})
     public Reservation getReservationById(@PathVariable Integer id) {
         return reservationRepository.findById(id).orElse(null);
     }
 
     @CrossOrigin
     @GetMapping(path = "/user/{userId}")
+    @RolesAllowed({"cinemas-admin", "admin", "cinemas-user", "user"})
     public Iterable<Reservation> getAllReservationsForUser(@PathVariable Integer userId) {
         return reservationRepository.findByUser_UserId(userId);
     }
 
     @CrossOrigin
     @PostMapping(path = "/create")
+    @RolesAllowed({"cinemas-admin", "admin", "cinemas-user", "user"})
     public ReservationDTO createReservation(@DTO(TicketDTO[].class) Ticket[] tickets) throws Exception {
         List<Ticket> createdTicketsForScreening = ticketRepository.findByScreening_ScreeningId(tickets[0].getScreening().getScreeningId());
         Screening screeningFromDB = screeningRepository.findById(tickets[0].getScreening().getScreeningId()).orElse(null);
@@ -74,6 +77,7 @@ public class ReservationResource {
 
     @CrossOrigin
     @PutMapping(path = "/update")
+    @RolesAllowed({"cinemas-admin", "admin"})
     public Reservation registerOrUpdateReservation(@RequestBody Reservation reservationToCreateOrUpdate) {
         return reservationRepository.findById(reservationToCreateOrUpdate.getReservationId())
                 .map(reservation -> {

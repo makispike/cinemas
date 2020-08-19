@@ -1,14 +1,12 @@
 package ephec.integration.cinemas.rest.boundary;
 
-import ephec.integration.cinemas.persistence.boundary.MovieRepository;
+import ephec.integration.cinemas.persistence.control.MovieRepository;
 import ephec.integration.cinemas.persistence.control.*;
-import ephec.integration.cinemas.persistence.entity.Genre;
-import ephec.integration.cinemas.persistence.entity.Movie;
-import ephec.integration.cinemas.persistence.entity.Screening;
-import ephec.integration.cinemas.persistence.entity.Version;
+import ephec.integration.cinemas.persistence.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,12 +53,14 @@ public class MovieResource {
 
     @CrossOrigin
     @PostMapping(path="/create")
+    @RolesAllowed({"cinemas-admin", "admin"})
     public Movie createMovie(@DTO(MovieDTO.class) Movie movie) {
         return movieRepository.save(movie);
     }
 
     @CrossOrigin
     @PutMapping(path="/update")
+    @RolesAllowed({"cinemas-admin", "admin"})
     public Movie createOrUpdateMovie(@RequestBody Movie movieToCreateOrUpdate) {
         return movieRepository.findById(movieToCreateOrUpdate.getMovieId())
                 .map(movie -> {
