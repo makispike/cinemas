@@ -61,7 +61,7 @@ public class MovieResource {
     @CrossOrigin
     @PutMapping(path="/update")
     @RolesAllowed({"cinemas-admin", "admin"})
-    public Movie createOrUpdateMovie(@RequestBody Movie movieToCreateOrUpdate) {
+    public Movie createOrUpdateMovie(@DTO(MovieDTO.class) Movie movieToCreateOrUpdate) {
         return movieRepository.findById(movieToCreateOrUpdate.getMovieId())
                 .map(movie -> {
                     movie.setMovieNameEN(movieToCreateOrUpdate.getMovieNameEN());

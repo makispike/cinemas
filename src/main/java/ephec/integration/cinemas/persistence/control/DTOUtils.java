@@ -94,7 +94,6 @@ public class DTOUtils {
         userDTO.setUserFirstName(user.getUserFirstName());
         userDTO.setUserLastName(user.getUserLastName());
         userDTO.setUserAddress(user.getUserAddress());
-        userDTO.setUserAge(user.getUserAge());
         userDTO.setUserContactEmail(user.getUserContactEmail());
         return userDTO;
     }

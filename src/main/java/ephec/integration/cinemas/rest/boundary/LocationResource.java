@@ -1,15 +1,16 @@
 package ephec.integration.cinemas.rest.boundary;
 
+import ephec.integration.cinemas.persistence.control.DTOUtils;
 import ephec.integration.cinemas.persistence.control.LocationRepository;
 import ephec.integration.cinemas.persistence.control.PriceCategoryRepository;
 import ephec.integration.cinemas.persistence.control.VenueRepository;
-import ephec.integration.cinemas.persistence.entity.Location;
-import ephec.integration.cinemas.persistence.entity.PriceCategory;
-import ephec.integration.cinemas.persistence.entity.Venue;
+import ephec.integration.cinemas.persistence.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.ArrayList;
+import java.util.List;
 
 // Documentation about these endpoints can be found at {this application's URL}/swagger-ui.html
 @RestController
@@ -21,11 +22,17 @@ public class LocationResource {
     private PriceCategoryRepository priceCategoryRepository;
     @Autowired
     private VenueRepository venueRepository;
+    @Autowired
+    private DTOUtils dtoUtils;
 
     @CrossOrigin
     @GetMapping(path = "/all")
-    public Iterable<Location> getAllLocations() {
-        return locationRepository.findAll();
+    public List<LocationDTO> getAllLocations() {
+        List<LocationDTO> locationDTOS = new ArrayList<>() ;
+        for (Location location : locationRepository.findAll()) {
+            locationDTOS.add(createLocationDTO(location));
+        }
+        return locationDTOS;
     }
 
     @CrossOrigin
@@ -88,6 +95,34 @@ public class LocationResource {
     @RolesAllowed({"cinemas-admin", "admin"})
     public Location newLocation(@RequestBody Location location) {
         return locationRepository.save(location);
+    }
+
+    private LocationDTO createLocationDTO(Location location) {
+        if (location == null) {
+            return null;
+        }
+        LocationDTO locationDTO = new LocationDTO();
+        locationDTO.setLocationId(location.getLocationId());
+        locationDTO.setLocationAddress(location.getLocationAddress());
+        locationDTO.setLocationDescriptionEN(location.getLocationDescriptionEN());
+        locationDTO.setLocationDescriptionFR(location.getLocationDescriptionFR());
+        locationDTO.setLocationDescriptionNL(location.getLocationDescriptionNL());
+        locationDTO.setLocationName(location.getLocationName());
+        locationDTO.setLocationPhotoUrl(location.getLocationPhotoUrl());
+
+        List<VenueDTO> venueDTOs = new ArrayList<>();
+        for (Venue venue : location.getVenues()) {
+            VenueDTO venueDTO = dtoUtils.getVenueDTO(venue);
+            venueDTOs.add(venueDTO);
+        }
+        locationDTO.setVenues(venueDTOs);
+        List<PriceCategoryDTO> priceCategoryDTOS = new ArrayList<>();
+        for (PriceCategory priceCategory : location.getPriceCategories()) {
+            PriceCategoryDTO priceCategoryDTO = dtoUtils.getPriceCategoryDTO(priceCategory);
+            priceCategoryDTOS.add(priceCategoryDTO);
+        }
+        locationDTO.setPriceCategories(priceCategoryDTOS);
+        return locationDTO;
     }
 
 }

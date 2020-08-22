@@ -1,19 +1,11 @@
 package ephec.integration.cinemas.rest.boundary;
 
-import ephec.integration.cinemas.persistence.control.GenreRepository;
-import ephec.integration.cinemas.persistence.control.MovieRepository;
-import ephec.integration.cinemas.persistence.control.ScreeningRepository;
-import ephec.integration.cinemas.persistence.control.DTOUtils;
-import ephec.integration.cinemas.persistence.entity.GenreDTO;
-import ephec.integration.cinemas.persistence.entity.PriceCategoryDTO;
-import ephec.integration.cinemas.persistence.entity.ScreeningDTO;
-import ephec.integration.cinemas.persistence.entity.Genre;
-import ephec.integration.cinemas.persistence.entity.Movie;
-import ephec.integration.cinemas.persistence.entity.PriceCategory;
-import ephec.integration.cinemas.persistence.entity.Screening;
+import ephec.integration.cinemas.persistence.control.*;
+import ephec.integration.cinemas.persistence.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +47,7 @@ public class ScreeningResource {
 
     @CrossOrigin
     @PutMapping(path="/update")
+    @RolesAllowed({"cinemas-admin", "admin"})
     public Screening updateScreening(@RequestBody Screening screeningToUpdate) {
         return screeningRepository.findById(screeningToUpdate.getScreeningId())
                 .map(screening -> {
@@ -63,6 +56,7 @@ public class ScreeningResource {
                     screening.setScreeningTime(screeningToUpdate.getScreeningTime()); // format hh:mm:ss
                     screening.setAvailableSeats(screeningToUpdate.getAvailableSeats());
                     screening.setVenue(screeningToUpdate.getVenue());
+                    screening.setVersion(screeningToUpdate.getVersion());
                     return screeningRepository.save(screening);
                 })
                 .orElseGet(() -> {
@@ -72,7 +66,8 @@ public class ScreeningResource {
 
     @CrossOrigin
     @PostMapping(path="/new")
-    public Screening createScreening(@RequestBody Screening screening) {
+    @RolesAllowed({"cinemas-admin", "admin"})
+    public Screening createScreening(@DTO(ScreeningDTO.class) Screening screening) {
         return screeningRepository.save(screening);
     }
 

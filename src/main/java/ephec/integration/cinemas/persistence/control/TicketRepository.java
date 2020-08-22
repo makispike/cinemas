@@ -11,4 +11,6 @@ public interface TicketRepository extends CrudRepository<Ticket, Integer> {
     // By default, there is only a findAll() method, in case there are more specific queries needed, write them here.
 
     List<Ticket> findByScreening_ScreeningId(Integer id);
+
+    List<Ticket> findByReservation_ReservationId(Integer id);
 }

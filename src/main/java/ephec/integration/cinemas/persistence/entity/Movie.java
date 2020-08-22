@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "movieId")
@@ -47,7 +49,7 @@ public class Movie {
             joinColumns = { @JoinColumn(name = "film_idFilm") },
             inverseJoinColumns = { @JoinColumn(name = "genre_idGenre") }
     )
-    Set<Genre> genres = new HashSet<>();
+    List<Genre> genres = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(
@@ -55,7 +57,7 @@ public class Movie {
             joinColumns = { @JoinColumn(name = "film_idFilm") },
             inverseJoinColumns = { @JoinColumn(name = "version_idVersion") }
     )
-    Set<Version> versions = new HashSet<>();
+    List<Version> versions = new ArrayList<>();
 
     @OneToMany(mappedBy="movie", cascade = CascadeType.MERGE)
     @JsonManagedReference(value="movie-screening")

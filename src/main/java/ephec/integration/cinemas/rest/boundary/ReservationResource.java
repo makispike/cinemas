@@ -23,6 +23,8 @@ public class ReservationResource {
     @Autowired
     private ScreeningRepository screeningRepository;
     @Autowired
+    private MovieRepository movieRepository;
+    @Autowired
     private DTOUtils dtoUtils;
 
     @CrossOrigin
@@ -46,8 +48,21 @@ public class ReservationResource {
     @CrossOrigin
     @GetMapping(path = "/user/{userId}")
     @RolesAllowed({"cinemas-admin", "admin", "cinemas-user", "user"})
-    public Iterable<Reservation> getAllReservationsForUser(@PathVariable Integer userId) {
-        return reservationRepository.findByUser_UserId(userId);
+    public List<ReservationDTO> getAllReservationsForUser(@PathVariable Integer userId) {
+        List<ReservationDTO> reservationDTOS = new ArrayList<>();
+        for (Reservation reservation : reservationRepository.findByUser_UserId(userId)) {
+            ReservationDTO reservationDTO = createReservationDTO(reservation);
+            Screening screening = (screeningRepository.findById(reservationDTO.getTickets().get(0).getScreening().getScreeningId()).orElse(null));
+            if (screening != null) {
+                for (TicketDTO ticketDTO : reservationDTO.getTickets()) {
+                    ScreeningDTO screeningDTO = dtoUtils.getScreeningsDTO(screening);
+                    screeningDTO.setMovie(dtoUtils.getMovieDTO(screening.getMovie()));
+                    ticketDTO.setScreening(screeningDTO);
+                }
+            }
+            reservationDTOS.add(reservationDTO);
+        }
+        return reservationDTOS;
     }
 
     @CrossOrigin
@@ -102,12 +117,12 @@ public class ReservationResource {
         if (reservation == null) {
             return null;
         }
-        ReservationDTO reservationDTO = new ReservationDTO();
+        ReservationDTO reservationDTO = dtoUtils.getReservationDTO(reservation);
         List<TicketDTO> ticketDTOs = new ArrayList<>();
         reservationDTO.setReservationId(reservation.getReservationId());
         reservationDTO.setUser(dtoUtils.getUserDTO(reservation.getUser()));
-
-        for (Ticket ticket : reservation.getTickets()) {
+        List<Ticket> tickets = ticketRepository.findByReservation_ReservationId(reservation.getReservationId());
+        for (Ticket ticket : tickets) {
             TicketDTO newTicketDTO = dtoUtils.getTicketDTO(ticket);
             PriceCategoryDTO priceCategoryDTO = dtoUtils.getPriceCategoryDTO(ticket.getPriceCategory());
             ScreeningDTO screeningDTO = dtoUtils.getScreeningsDTO(ticket.getScreening());
